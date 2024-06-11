@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Author</title>
+</head>
+<body>
+    <h1>Add a new author</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Add Author</button>
+    </form>
+
+    <a href="{% url 'quoteapp:main' %}">Back to Home</a>
+</body>
+</html>

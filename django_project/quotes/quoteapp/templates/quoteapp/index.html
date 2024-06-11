@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Quotes</title>
+    <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css"/>
+    <style>
+        nav {
+            margin-bottom: 20px;
+            border-bottom: 2px solid;
+            padding-left: 30px;
+        }
+    </style>
+</head>
+<body>
+<main class="container">
+    <h1>Quotes</h1>
+
+
+    <nav style="margin-bottom: 20px; border-bottom: 2px solid; padding-left: 30px">
+    {% if user.is_authenticated %}
+    <ul>
+        <li>Welcome <b>{{ user.username }}!</b></li>
+        <li><a href="{% url 'quoteapp:add_author' %}" role="button">Add author</a></li>
+        <li><a href="{% url 'quoteapp:add_quote' %}" role="button">Add quote</a></li>
+        <li><a href="{% url 'users:logout' %}" role="button">Logout</a></li>
+        <li><a href="{% url 'quoteapp:scrap_all' %}" role="button">Scrap</a></li> <!-- Scrap button -->
+    </ul>
+    {% else %}
+    <ul>
+        <li><a href="{% url 'users:signup' %}" role="button">Sign Up</a></li>
+        <li><a href="{% url 'users:login' %}" role="button">Login</a></li>
+
+    </ul>
+    {% endif %}
+    </nav>
+    <ul>
+        {% for quote in page_obj %}
+        <li>"{{ quote.text }}" - <a href="{% url 'quoteapp:author_detail' quote.author.id %}">{{quote.author.name}}</a></li>
+        {% endfor %}
+    </ul>
+    <nav aria-label="Page navigation">
+        <ul class="pagination">
+            {% if page_obj.has_previous %}
+                <li><a href="?page=1" aria-label="First">&laquo; First</a></li>
+                <li><a href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">&lsaquo; Previous</a></li>
+            {% else %}
+                <li class="disabled">&laquo; First</li>
+                <li class="disabled">&lsaquo; Previous</li>
+            {% endif %}
+
+            <li class="page-item disabled"><span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span></li>
+
+            {% if page_obj.has_next %}
+                <li><a href="?page={{ page_obj.next_page_number }}" aria-label="Next">Next &rsaquo;</a></li>
+                <li><a href="?page={{ page_obj.paginator.num_pages }}" aria-label="Last">Last &raquo;</a></li>
+            {% else %}
+                <li class="disabled">Next &rsaquo;</li>
+                <li class="disabled">Last &raquo;</li>
+            {% endif %}
+        </ul>
+    </nav>
+</main>
+</body>
+</html>
